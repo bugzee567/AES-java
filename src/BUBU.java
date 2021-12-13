@@ -314,12 +314,14 @@ public class BUBU {
             } catch (BadPaddingException badPaddingException) {
                 badPaddingException.printStackTrace();
             }
-
+            String output9 =null;
             try {
                 System.out.println(new String(outputDecryptedCustom9,"UTF-8"));
+                output9 = new String(outputDecryptedCustom9,"UTF-8");
             } catch (UnsupportedEncodingException unsupportedEncodingException) {
                 unsupportedEncodingException.printStackTrace();
             }
+            lblDecryption.setText("DECRIPTION REZULTATS: " + output9);
 
         });
 
