@@ -12,37 +12,24 @@ import javax.crypto.*;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.util.Base64;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.*;
 
 
 public class BUBU {
+    JButton btnEncrypt;
+    JButton btnDecrypt;
     private final static String ALGO="AES/CBC/PKCS5PADDING";
-    public static void main(String[] args) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidAlgorithmParameterException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, IOException {
+    public static void main(String[] args) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidAlgorithmParameterException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, IOException{
         //GUI stuff
         JFrame frame = new JFrame();
-        frame.setTitle("AES");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800,600);
         frame.setLayout(null);
-        frame.setVisible(true);
 
-        JLabel label = new JLabel();
-        label.setText("hello");
-        label.setForeground(new Color(0x00FF00));
-        label.setFont(new Font("MV Boli",Font.BOLD,35));
-        label.setVerticalAlignment(JLabel.TOP);
-        label.setHorizontalAlignment(JLabel.CENTER);
-        label.setBounds(300,0,250,50);
-        frame.add(label);
+        //frame.setVisible(true);
 
-        JTextField textField = new JTextField();
-        textField.setPreferredSize(new Dimension(250,40));
-        //textField.setVerticalAlignment(JLabel.TOP);
-        textField.setHorizontalAlignment(JLabel.CENTER);
-        textField.setBounds(300,50,250,50);
-        textField.setVisible(true);
-        //textField.setBorder();
-        frame.add(textField);
 
 
         String inputPath = "src/files/plain.txt";
@@ -54,10 +41,10 @@ public class BUBU {
         key.init(128);
         //SecretKey secretKey = key.generateKey();
         //##############################################################CHANGE KEY HERE####################################################################
-        SecretKeySpec sks=new SecretKeySpec("qqqEncryptionKey".getBytes(),"AES");
+        SecretKeySpec sks=new SecretKeySpec("aesEncryptionKey".getBytes(),"AES");
         byte[] bs=new byte[128];
         //##############################################################CHANGE VECTOR HERE####################################################################
-        String sab = "wwwryptionIntVec";
+        String sab = "aesEncryptionKey";
         bs = sab.getBytes();
         //SecureRandom random=new SecureRandom();
         //random.nextBytes(bs);
@@ -79,7 +66,7 @@ public class BUBU {
         byte[] outputDecrypted = cipher.doFinal(Base64.getDecoder().decode(output.getBytes()));
         //decrypts custom text
         //##############################################################CHANGE ENCRYPTED STRING HERE####################################################################
-        byte[] outputDecryptedCustom = cipher.doFinal(Base64.getDecoder().decode("pmspJktRY+jET9pGxRoyZA==".getBytes()));
+        byte[] outputDecryptedCustom = cipher.doFinal(Base64.getDecoder().decode("3fHgXD6NRGZIxBMFos0NaWg89NboBzgJfYCyQJdAenI=".getBytes()));
 
         System.out.println(new String(outputDecrypted,"UTF-8"));
         System.out.println(new String(outputDecryptedCustom,"UTF-8"));
@@ -88,6 +75,275 @@ public class BUBU {
                 new FileOutputStream(outputPath), "UTF-8"))) {
             writer.write(inputText);
     }
+        JLabel lblKey = new JLabel();
+        lblKey.setText("IEVADIET KEY 128BIT");
+        lblKey.setForeground(new Color(0x00FF00));
+        lblKey.setFont(new Font("MV Boli",Font.BOLD,15));
+        lblKey.setVerticalAlignment(JLabel.TOP);
+        lblKey.setHorizontalAlignment(JLabel.CENTER);
+        lblKey.setBounds(100,0,250,50);
+        frame.add(lblKey);
+
+        JLabel lblVector = new JLabel();
+        lblVector.setText("IEVADIET VEKTORU 128BIT");
+        lblVector.setForeground(new Color(0x00FF00));
+        lblVector.setFont(new Font("MV Boli",Font.BOLD,15));
+        lblVector.setVerticalAlignment(JLabel.TOP);
+        lblVector.setHorizontalAlignment(JLabel.CENTER);
+        lblVector.setBounds(100,100,250,50);
+        frame.add(lblVector);
+
+        Border border = BorderFactory.createLineBorder(Color.black,3);
+
+        JTextField txtKey = new JTextField();
+        txtKey.setPreferredSize(new Dimension(250,40));
+        //textField.setVerticalAlignment(JLabel.TOP);
+        txtKey.setHorizontalAlignment(JLabel.CENTER);
+        txtKey.setBounds(100,50,250,50);
+        txtKey.setVisible(true);
+        txtKey.setBorder(border);
+        frame.add(txtKey);
+
+        JTextField txtVector = new JTextField();
+        txtVector.setPreferredSize(new Dimension(250,40));
+        //textField.setVerticalAlignment(JLabel.TOP);
+        txtVector.setHorizontalAlignment(JLabel.CENTER);
+        txtVector.setBounds(100,150,250,50);
+        txtVector.setVisible(true);
+        txtVector.setBorder(border);
+        frame.add(txtVector);
+
+        JLabel lblEncryption = new JLabel();
+        lblEncryption.setText("ENCRYPTION REZULTATS:");
+        lblEncryption.setForeground(new Color(0x00FF00));
+        lblEncryption.setFont(new Font("MV Boli",Font.BOLD,15));
+        lblEncryption.setVerticalAlignment(JLabel.TOP);
+        lblEncryption.setHorizontalAlignment(JLabel.CENTER);
+        lblEncryption.setBounds(10,400,800,50);
+        frame.add(lblEncryption);
+
+        JLabel lblPlaintext = new JLabel();
+        lblPlaintext.setText("IEVADIET PLAIN TEKSTU");
+        lblPlaintext.setForeground(new Color(0x00FF00));
+        lblPlaintext.setFont(new Font("MV Boli",Font.BOLD,15));
+        lblPlaintext.setVerticalAlignment(JLabel.TOP);
+        lblPlaintext.setHorizontalAlignment(JLabel.CENTER);
+        lblPlaintext.setBounds(100,200,250,50);
+        frame.add(lblPlaintext);
+
+        JTextField txtPlaintext = new JTextField();
+        txtPlaintext.setPreferredSize(new Dimension(250,40));
+        //textField.setVerticalAlignment(JLabel.TOP);
+        txtPlaintext.setHorizontalAlignment(JLabel.CENTER);
+        txtPlaintext.setBounds(100,250,250,50);
+        txtPlaintext.setVisible(true);
+        txtPlaintext.setBorder(border);
+        frame.add(txtPlaintext);
+
+        JButton btnEncrypt = new JButton("ENCRYPT");
+        btnEncrypt.setBounds(100,350, 250,50);
+        frame.add(btnEncrypt);
+        btnEncrypt.addActionListener(e -> {
+            try {
+                KeyGenerator key1=KeyGenerator.getInstance("AES");
+            } catch (NoSuchAlgorithmException noSuchAlgorithmException) {
+                noSuchAlgorithmException.printStackTrace();
+            }
+            key.init(128);
+            //SecretKey secretKey = key.generateKey();
+            //##############################################################CHANGE KEY HERE####################################################################
+            SecretKeySpec sks1=new SecretKeySpec(txtKey.getText().getBytes(),"AES");
+            byte[] bs1=new byte[128];
+            //##############################################################CHANGE VECTOR HERE####################################################################
+            String sab1 = txtVector.getText();
+            bs1 = sab1.getBytes();
+            //SecureRandom random=new SecureRandom();
+            //random.nextBytes(bs);
+            IvParameterSpec ivParameterSpec1 = new IvParameterSpec(bs1);
+
+            Cipher cipher1= null;
+            try {
+                cipher1 = Cipher.getInstance(ALGO);
+            } catch (NoSuchAlgorithmException noSuchAlgorithmException) {
+                noSuchAlgorithmException.printStackTrace();
+            } catch (NoSuchPaddingException noSuchPaddingException) {
+                noSuchPaddingException.printStackTrace();
+            }
+            try {
+                cipher1.init(Cipher.ENCRYPT_MODE, sks1, ivParameterSpec1);
+            } catch (InvalidKeyException invalidKeyException) {
+                invalidKeyException.printStackTrace();
+            } catch (InvalidAlgorithmParameterException invalidAlgorithmParameterException) {
+                invalidAlgorithmParameterException.printStackTrace();
+            }
+
+            //##############################################################CHANGE PLAINTEXT HERE####################################################################
+            byte[] outputEncryption1 = new byte[0];
+            try {
+                outputEncryption1 = Base64.getEncoder().encode(cipher1.doFinal(txtPlaintext.getText().getBytes()));
+            } catch (IllegalBlockSizeException illegalBlockSizeException) {
+                illegalBlockSizeException.printStackTrace();
+            } catch (BadPaddingException badPaddingException) {
+                badPaddingException.printStackTrace();
+            }
+            String output1 = null;
+            try {
+                output1 = new String(outputEncryption1,"UTF-8");
+            } catch (UnsupportedEncodingException unsupportedEncodingException) {
+                unsupportedEncodingException.printStackTrace();
+            }
+            System.out.println(output1);
+            lblEncryption.setText("ENCRYPTION REZULTATS: " + output1);
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        JLabel lblKeyDecrypt = new JLabel();
+        lblKeyDecrypt.setText("IEVADIET KEY 128BIT");
+        lblKeyDecrypt.setForeground(new Color(0x00FF00));
+        lblKeyDecrypt.setFont(new Font("MV Boli",Font.BOLD,15));
+        lblKeyDecrypt.setVerticalAlignment(JLabel.TOP);
+        lblKeyDecrypt.setHorizontalAlignment(JLabel.CENTER);
+        lblKeyDecrypt.setBounds(400,0,250,50);
+        frame.add(lblKeyDecrypt);
+
+        JLabel lblVectorDecrypt = new JLabel();
+        lblVectorDecrypt.setText("IEVADIET VEKTORU 128BIT");
+        lblVectorDecrypt.setForeground(new Color(0x00FF00));
+        lblVectorDecrypt.setFont(new Font("MV Boli",Font.BOLD,15));
+        lblVectorDecrypt.setVerticalAlignment(JLabel.TOP);
+        lblVectorDecrypt.setHorizontalAlignment(JLabel.CENTER);
+        lblVectorDecrypt.setBounds(400,100,250,50);
+        frame.add(lblVectorDecrypt);
+
+
+        JTextField txtKeyDecrypt = new JTextField();
+        txtKeyDecrypt.setPreferredSize(new Dimension(250,40));
+        //textField.setVerticalAlignment(JLabel.TOP);
+        txtKeyDecrypt.setHorizontalAlignment(JLabel.CENTER);
+        txtKeyDecrypt.setBounds(400,50,250,50);
+        txtKeyDecrypt.setVisible(true);
+        txtKeyDecrypt.setBorder(border);
+        frame.add(txtKeyDecrypt);
+
+        JTextField txtVectorDecrypt = new JTextField();
+        txtVectorDecrypt.setPreferredSize(new Dimension(250,40));
+        //textField.setVerticalAlignment(JLabel.TOP);
+        txtVectorDecrypt.setHorizontalAlignment(JLabel.CENTER);
+        txtVectorDecrypt.setBounds(400,150,250,50);
+        txtVectorDecrypt.setVisible(true);
+        txtVectorDecrypt.setBorder(border);
+        frame.add(txtVectorDecrypt);
+
+        JLabel lblDecryption = new JLabel();
+        lblDecryption.setText("DECRYPTION REZULTATS:");
+        lblDecryption.setForeground(new Color(0x00FF00));
+        lblDecryption.setFont(new Font("MV Boli",Font.BOLD,15));
+        lblDecryption.setVerticalAlignment(JLabel.TOP);
+        lblDecryption.setHorizontalAlignment(JLabel.CENTER);
+        lblDecryption.setBounds(10,500,800,50);
+        frame.add(lblDecryption);
+
+        JLabel lblCiphertext = new JLabel();
+        lblCiphertext.setText("IEVADIET CIPHER TEKSTU");
+        lblCiphertext.setForeground(new Color(0x00FF00));
+        lblCiphertext.setFont(new Font("MV Boli",Font.BOLD,15));
+        lblCiphertext.setVerticalAlignment(JLabel.TOP);
+        lblCiphertext.setHorizontalAlignment(JLabel.CENTER);
+        lblCiphertext.setBounds(400,200,250,50);
+        frame.add(lblCiphertext);
+
+        JTextField txtCiphertext = new JTextField();
+        txtCiphertext.setPreferredSize(new Dimension(250,40));
+        //textField.setVerticalAlignment(JLabel.TOP);
+        txtCiphertext.setHorizontalAlignment(JLabel.CENTER);
+        txtCiphertext.setBounds(400,250,250,50);
+        txtCiphertext.setVisible(true);
+        txtCiphertext.setBorder(border);
+        frame.add(txtCiphertext);
+
+        JButton btnDecrypt = new JButton("DECRYPT");
+        btnDecrypt.setBounds(400,350, 250,50);
+        frame.add(btnDecrypt);
+        btnDecrypt.addActionListener(e -> {
+            SecretKeySpec sks9=new SecretKeySpec(txtKeyDecrypt.getText().getBytes(),"AES");
+            byte[] bs9=new byte[128];
+            //##############################################################CHANGE VECTOR HERE####################################################################
+            String sab9 = txtVectorDecrypt.getText();
+            bs9 = sab9.getBytes();
+            //SecureRandom random=new SecureRandom();
+            //random.nextBytes(bs);
+            IvParameterSpec ivParameterSpec9 = new IvParameterSpec(bs9);
+
+            Cipher cipher9= null;
+            try {
+                cipher9 = Cipher.getInstance(ALGO);
+            } catch (NoSuchAlgorithmException noSuchAlgorithmException) {
+                noSuchAlgorithmException.printStackTrace();
+            } catch (NoSuchPaddingException noSuchPaddingException) {
+                noSuchPaddingException.printStackTrace();
+            }
+
+            try {
+                cipher9.init(Cipher.DECRYPT_MODE, sks9, ivParameterSpec9);
+            } catch (InvalidKeyException invalidKeyException) {
+                invalidKeyException.printStackTrace();
+            } catch (InvalidAlgorithmParameterException invalidAlgorithmParameterException) {
+                invalidAlgorithmParameterException.printStackTrace();
+            }
+
+            //decrypts custom text
+            //##############################################################CHANGE ENCRYPTED STRING HERE####################################################################
+            byte[] outputDecryptedCustom9 = new byte[0];
+            try {
+                outputDecryptedCustom9 = cipher9.doFinal(Base64.getDecoder().decode(txtCiphertext.getText().getBytes()));
+            } catch (IllegalBlockSizeException illegalBlockSizeException) {
+                illegalBlockSizeException.printStackTrace();
+            } catch (BadPaddingException badPaddingException) {
+                badPaddingException.printStackTrace();
+            }
+
+            try {
+                System.out.println(new String(outputDecryptedCustom9,"UTF-8"));
+            } catch (UnsupportedEncodingException unsupportedEncodingException) {
+                unsupportedEncodingException.printStackTrace();
+            }
+
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        frame.setTitle("AES");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.pack();
+        frame.setSize(800,600);
+
+        frame.setVisible(true);
 }
     private static String readInputFile(String inputPath)
     {
