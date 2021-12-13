@@ -72,10 +72,10 @@ public class BUBU {
         System.out.println(new String(outputDecrypted,"UTF-8"));
         System.out.println(new String(outputDecryptedCustom,"UTF-8"));
 
-        try (Writer writer = new BufferedWriter(new OutputStreamWriter(
+/*        try (Writer writer = new BufferedWriter(new OutputStreamWriter(
                 new FileOutputStream(outputPath), "UTF-8"))) {
             writer.write(inputText);
-    }
+    }*/
         JLabel lblKey = new JLabel();
         lblKey.setText("IEVADIET KEY 128BIT");
         lblKey.setForeground(new Color(0x00FF00));
@@ -327,7 +327,7 @@ public class BUBU {
         });
 
         JButton btnFile = new JButton("Sifret failu");
-        btnFile.setBounds(400,500, 250,50);
+        btnFile.setBounds(100,500, 250,50);
         btnFile.addActionListener(e -> {
             JFileChooser fileChooser = new JFileChooser();
 
@@ -402,6 +402,82 @@ public class BUBU {
             }
         });
         frame.add(btnFile);
+
+
+
+
+
+
+        JButton btnFileDecrypt = new JButton("Atsifret failu");
+        btnFileDecrypt.setBounds(400,500, 250,50);
+        btnFileDecrypt.addActionListener(e -> {
+            JFileChooser fileChooser = new JFileChooser();
+
+            int response = fileChooser.showOpenDialog(null);
+            if(response == JFileChooser.APPROVE_OPTION) {
+                File file = new File(fileChooser.getSelectedFile().getAbsolutePath());
+                String inputTextFromFile99 = readInputFile(file.toString());
+                System.out.println(inputTextFromFile99);
+
+
+
+                SecretKeySpec sks99=new SecretKeySpec("encryptionIntVec".getBytes(),"AES");
+                byte[] bs99=new byte[128];
+                //##############################################################CHANGE VECTOR HERE####################################################################
+                String sab99 = "encryptionIntVec";
+                bs99 = sab99.getBytes();
+                //SecureRandom random=new SecureRandom();
+                //random.nextBytes(bs);
+                IvParameterSpec ivParameterSpec99 = new IvParameterSpec(bs99);
+
+                Cipher cipher99= null;
+                try {
+                    cipher99 = Cipher.getInstance(ALGO);
+                } catch (NoSuchAlgorithmException noSuchAlgorithmException) {
+                    noSuchAlgorithmException.printStackTrace();
+                } catch (NoSuchPaddingException noSuchPaddingException) {
+                    noSuchPaddingException.printStackTrace();
+                }
+
+                try {
+                    cipher99.init(Cipher.DECRYPT_MODE, sks99, ivParameterSpec99);
+                } catch (InvalidKeyException invalidKeyException) {
+                    invalidKeyException.printStackTrace();
+                } catch (InvalidAlgorithmParameterException invalidAlgorithmParameterException) {
+                    invalidAlgorithmParameterException.printStackTrace();
+                }
+
+                //decrypts custom text
+                //##############################################################CHANGE ENCRYPTED STRING HERE####################################################################
+                byte[] outputDecryptedCustom99 = new byte[0];
+                try {
+                    outputDecryptedCustom99 = cipher99.doFinal(Base64.getDecoder().decode(inputTextFromFile99.getBytes()));
+                } catch (IllegalBlockSizeException illegalBlockSizeException) {
+                    illegalBlockSizeException.printStackTrace();
+                } catch (BadPaddingException badPaddingException) {
+                    badPaddingException.printStackTrace();
+                }
+                String output99 =null;
+                try {
+                    System.out.println(new String(outputDecryptedCustom99,"UTF-8"));
+                    output99 = new String(outputDecryptedCustom99,"UTF-8");
+                } catch (UnsupportedEncodingException unsupportedEncodingException) {
+                    unsupportedEncodingException.printStackTrace();
+                }
+                try (Writer writer99 = new BufferedWriter(new OutputStreamWriter(
+                        new FileOutputStream(outputPath), "UTF-8"))) {
+                    writer99.write(output99);
+                } catch (UnsupportedEncodingException unsupportedEncodingException) {
+                    unsupportedEncodingException.printStackTrace();
+                } catch (FileNotFoundException fileNotFoundException) {
+                    fileNotFoundException.printStackTrace();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+
+            }
+        });
+        frame.add(btnFileDecrypt);
 
 
 
