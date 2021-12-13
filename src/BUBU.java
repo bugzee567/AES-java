@@ -17,6 +17,7 @@ import java.util.Base64;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.*;
+import javax.swing.JFileChooser;
 
 
 public class BUBU {
@@ -253,7 +254,7 @@ public class BUBU {
         lblDecryption.setFont(new Font("MV Boli",Font.BOLD,15));
         lblDecryption.setVerticalAlignment(JLabel.TOP);
         lblDecryption.setHorizontalAlignment(JLabel.CENTER);
-        lblDecryption.setBounds(10,500,800,50);
+        lblDecryption.setBounds(10,450,800,50);
         frame.add(lblDecryption);
 
         JLabel lblCiphertext = new JLabel();
@@ -325,6 +326,82 @@ public class BUBU {
 
         });
 
+        JButton btnFile = new JButton("Sifret failu");
+        btnFile.setBounds(400,500, 250,50);
+        btnFile.addActionListener(e -> {
+            JFileChooser fileChooser = new JFileChooser();
+
+            int response = fileChooser.showOpenDialog(null);
+            if(response == JFileChooser.APPROVE_OPTION){
+                File file = new File(fileChooser.getSelectedFile().getAbsolutePath());
+                String inputTextFromFile = readInputFile(file.toString());
+                System.out.println(inputTextFromFile);
+
+
+
+                try {
+                    KeyGenerator key1=KeyGenerator.getInstance("AES");
+                } catch (NoSuchAlgorithmException noSuchAlgorithmException) {
+                    noSuchAlgorithmException.printStackTrace();
+                }
+                key.init(128);
+                //SecretKey secretKey = key.generateKey();
+                //##############################################################CHANGE KEY HERE####################################################################
+                SecretKeySpec sks11=new SecretKeySpec("encryptionIntVec".getBytes(),"AES");
+                byte[] bs11=new byte[128];
+                //##############################################################CHANGE VECTOR HERE####################################################################
+                String sab11 = "encryptionIntVec";
+                bs11 = sab11.getBytes();
+                //SecureRandom random=new SecureRandom();
+                //random.nextBytes(bs);
+                IvParameterSpec ivParameterSpec11 = new IvParameterSpec(bs11);
+
+                Cipher cipher11= null;
+                try {
+                    cipher11 = Cipher.getInstance(ALGO);
+                } catch (NoSuchAlgorithmException noSuchAlgorithmException) {
+                    noSuchAlgorithmException.printStackTrace();
+                } catch (NoSuchPaddingException noSuchPaddingException) {
+                    noSuchPaddingException.printStackTrace();
+                }
+                try {
+                    cipher11.init(Cipher.ENCRYPT_MODE, sks11, ivParameterSpec11);
+                } catch (InvalidKeyException invalidKeyException) {
+                    invalidKeyException.printStackTrace();
+                } catch (InvalidAlgorithmParameterException invalidAlgorithmParameterException) {
+                    invalidAlgorithmParameterException.printStackTrace();
+                }
+
+                //##############################################################CHANGE PLAINTEXT HERE####################################################################
+                byte[] outputEncryption11 = new byte[0];
+                try {
+                    outputEncryption11 = Base64.getEncoder().encode(cipher11.doFinal(inputTextFromFile.getBytes()));
+                } catch (IllegalBlockSizeException illegalBlockSizeException) {
+                    illegalBlockSizeException.printStackTrace();
+                } catch (BadPaddingException badPaddingException) {
+                    badPaddingException.printStackTrace();
+                }
+                String output11 = null;
+                try {
+                    output11 = new String(outputEncryption11,"UTF-8");
+                } catch (UnsupportedEncodingException unsupportedEncodingException) {
+                    unsupportedEncodingException.printStackTrace();
+                }
+                System.out.println(output11);
+                try (Writer writer11 = new BufferedWriter(new OutputStreamWriter(
+                        new FileOutputStream(outputPath), "UTF-8"))) {
+                    writer11.write(output11);
+                } catch (UnsupportedEncodingException unsupportedEncodingException) {
+                    unsupportedEncodingException.printStackTrace();
+                } catch (FileNotFoundException fileNotFoundException) {
+                    fileNotFoundException.printStackTrace();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+
+            }
+        });
+        frame.add(btnFile);
 
 
 
